@@ -1,0 +1,17 @@
+{
+  "root": "/home/dev/feedback/uid38837",
+  "B": "/home/dev/feedback/uid38837",
+  "sha": "56c63eae562f0f0a28339c144e52aa9b5a8bf45e",
+  "wslDistro": "Ubuntu-26.04",
+  "source": {
+    "owner": "hakluke",
+    "repo": "hakrawler",
+    "sha": "56c63eae562f0f0a28339c144e52aa9b5a8bf45e"
+  },
+  "fork": {
+    "owner": "Rrr119",
+    "repo": "hakrawler",
+    "cloneUrl": "https://github.com/Rrr119/hakrawler.git"
+  },
+  "at": "2026-11-25T19:42:06.041Z"
+}

@@ -1,0 +1,13 @@
+https://blog.example.org/.git/HEAD
+https://blog.example.org/wp-admin/
+https://blog.example.org/wp-config.php.bak
+https://blog.example.org/wp-login.php?redirect_to=https%3A%2F%2Fblog.example.org%2Fwp-admin%2F
+https://blog.example.org/xmlrpc.php
+https://blog.example.org/wp-content/uploads/2024/11/invoice.pdf
+https://blog.example.org/search?q=wordpress
+https://blog.example.org/docs/api?version=2
+https://blog.example.org/?p=101
+https://blog.example.org/category/security/page/2/
+https://blog.example.org/tags/golang?page=1
+https://blog.example.org/
+https://blog.example.org/docs/getting-started?utm_campaign=nav

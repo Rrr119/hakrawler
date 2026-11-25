@@ -34,6 +34,45 @@ Include subdomains:
 echo https://google.com | hakrawler -subs
 ```
 
+## Noise reduction and triage
+
+Use `-smart` to normalize URLs, deduplicate equivalent parameter fingerprints,
+and print the most sensitive endpoints first:
+
+```
+echo https://target.example | hakrawler -smart -hide-static -s
+```
+
+For machine-readable output and complete raw-URL traceability:
+
+```
+echo https://target.example | hakrawler -smart -hide-static -json -aliases \
+  -trace-file hakrawler-trace.jsonl
+```
+
+You can also re-process an already-crawled URL list without sending requests:
+
+```
+cat urls.txt | hakrawler -filter -smart -hide-static -sensitivity
+```
+
+`-filter` accepts bare URL lists, legacy `[source] URL` / `[where] [source] URL`
+text output, and hakrawler JSON lines.
+
+Normalization lowercases the scheme/host, removes fragments and default ports,
+resolves dot segments, sorts query parameters, and removes common tracking
+parameters. The parameter fingerprint additionally ignores parameter values and
+generalizes numeric, UUID, hash, and common resource-identifier path segments.
+SPA-style `#/route?param=...` fragments are included in the fingerprint; plain
+in-page anchors are not.
+The original crawled URL remains in the historical `URL` JSON field; opt-in
+`normalized_url`, `fingerprint`, `sensitivity`, `static`, `reasons`, `aliases`,
+and `-trace-file` records provide the reversible mapping back to every raw URL.
+
+Without the new flags, the original streaming text/JSON formats and exact `-u`
+behavior remain unchanged. The three-site manual-screening regression suite lives
+under `testdata/acceptance/` and runs with `go test ./...`.
+
 > Note: a common issue is that the tool returns no URLs. This usually happens when a domain is specified (https://example.com), but it redirects to a subdomain (https://www.example.com). The subdomain is not included in the scope, so the no URLs are printed. In order to overcome this, either specify the final URL in the redirect chain or use the `-subs` option to include subdomains.
 
 ## Example tool chain
@@ -90,28 +129,58 @@ echo https://www.google.com | docker run --rm -i hakluke/hakrawler -subs
 ## Command-line options
 ```
 Usage of hakrawler:
+  -aliases
+    	Include all distinct raw URLs in each deduplicated JSON record.
   -d int
     	Depth to crawl. (default 2)
+  -dedupe
+    	Alias for -dedupe-params.
+  -dedupe-params
+    	Normalize URLs and deduplicate equivalent host/path/parameter fingerprints.
   -dr
     	Disable following HTTP redirects.
+  -exclude-static
+    	Alias for -hide-static.
+  -filter
+    	Treat stdin as an already-crawled URL list and do not perform network requests.
+  -fingerprint
+    	Alias for -dedupe-params.
   -h string
     	Custom headers separated by two semi-colons. E.g. -h "Cookie: foo=bar;;Referer: http://example.com/"
+  -hide-static
+    	Suppress classified static assets such as CSS, images, fonts, media, and scripts.
   -i	Only crawl inside path
   -insecure
     	Disable TLS verification.
   -json
     	Output as JSON.
+  -normalize
+    	Include normalization and fingerprint metadata in JSON or trace output.
+  -normalize-url
+    	Alias for -normalize.
   -proxy string
     	Proxy URL. E.g. -proxy http://127.0.0.1:8080
   -s	Show the source of URL based on where it was found. E.g. href, form, script, etc.
+  -sensitivity
+    	Prefix plain-text output with sensitivity label and score.
   -size int
     	Page size limit, in KB. (default -1)
+  -smart
+    	Shorthand for -dedupe-params and -sort=sensitivity.
+  -sort string
+    	Sort output; supported value: "sensitivity".
+  -sort-by string
+    	Alias for -sort; supported value: "sensitivity".
+  -sort-sensitive
+    	Alias for -sort=sensitivity.
   -subs
     	Include subdomains for crawling.
   -t int
     	Number of threads to utilise. (default 8)
   -timeout int
     	Maximum time to crawl each URL from stdin, in seconds. (default -1)
+  -trace-file string
+    	Write one JSON trace record per crawled URL to the specified file.
   -u	Show only unique urls.
   -w	Show at which link the URL is found.
 ```

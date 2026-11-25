@@ -1,0 +1,11 @@
+https://shop.example/.git/config
+https://shop.example/export/orders.csv?token=tok_live_example
+https://shop.example/admin/customers?role=vip
+https://shop.example/admin/orders?status=paid
+https://shop.example/account/login?next=/account
+https://shop.example/account/profile?tab=security
+https://shop.example/search?q=shoes&page=1
+https://shop.example/products?category=shoes&sort=price&page=1
+http://shop.example:80/products?category=shoes
+https://shop.example/
+https://shop.example/products/1001?ref=homepage
